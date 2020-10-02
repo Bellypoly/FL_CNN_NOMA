@@ -1,0 +1,43 @@
+% weight size = 5 x 5 x 1 x4 (float = 8 byte) 
+% --> 100 x 8 byte x 8 bits = 6400 bits
+S = 100; % s = # of bits required for each edge device
+distance_to_device_1 = 100;
+distance_to_device_2 = 150;
+distance_to_device_3 = 200;
+MaxDsttoUser_00 = 10;
+SumSquareDst_00=distance_to_device_1^2+distance_to_device_2^2+distance_to_device_3^2;
+
+TotPwrBS_00 = 1.0;
+% previously suggested: 0.3
+PwrPUser_pp = TotPwrBS_00*(distance_to_device_1^2)/SumSquareDst_00;
+% previously suggested: 0.2
+PwrUser1_p1 = TotPwrBS_00*(distance_to_device_2^2)/SumSquareDst_00;
+% previously suggested: 0.5
+PwrUser2_p2 = TotPwrBS_00*(distance_to_device_3^2)/SumSquareDst_00;
+SgnPUser_xp = rand(1,S) > 0.5;
+SgnUser1_xs1 = rand(1,S) > 0.5;
+SgnUser2_xs2 = rand(1,S) > 0.5;
+awgn = sqrt(PwrPUser_pp)*SgnPUser_xp;
+awgn = sqrt(PwrUser1_p1)*SgnUser1_xs1 + awgn;
+awgn = sqrt(PwrUser2_p2)*SgnUser2_xs2 + awgn;
+awgnReduc_0 = 10; 
+awgnPUser_N = randn(1,S)/awgnReduc_0;
+awgnUser1_N = randn(1,S)/awgnReduc_0;
+awgnUser2_N = randn(1,S)/awgnReduc_0;
+
+SyLosPUser_00 = 1 + rand/(10*PwrPUser_pp);
+AtnGnPUser_00 = TotPwrBS_00/PwrPUser_pp * 1/SyLosPUser_00;
+AtnGnPUser_00 = AtnGnPUser_00*(distance_to_device_1^2)/(MaxDsttoUser_00^2);
+AtnGnPUser_00 = 1 - AtnGnPUser_00;
+SyLosUser1_00 = 1 + rand/(10*PwrUser1_p1);
+AtnGnUser1_00 = TotPwrBS_00/PwrUser1_p1 * 1/SyLosUser1_00;
+AtnGnUser1_00 = AtnGnUser1_00*(distance_to_device_2^2)/(MaxDsttoUser_00^2);
+AtnGnUser1_00 = 1 - AtnGnUser1_00;
+SyLosUser2_00 = 1 + rand/(10*PwrUser2_p2);
+AtnGnUser2_00 = TotPwrBS_00/PwrUser2_p2 * 1/SyLosUser2_00;
+AtnGnUser2_00 = AtnGnUser2_00*(distance_to_device_3^2)/(MaxDsttoUser_00^2);
+AtnGnUser2_00 = 1 - AtnGnUser2_00;
+
+RxSgnPUser_ysp = awgn*AtnGnPUser_00 + awgnPUser_N;
+RxSgnUser1_ys1 = awgn*AtnGnUser1_00 + awgnUser1_N;
+RxSgnUser2_ys2 = awgn*AtnGnUser2_00 + awgnUser2_N;

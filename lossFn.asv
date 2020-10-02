@@ -1,0 +1,10 @@
+function y = lossFn(Matrix)
+row_count = size(Matrix,1)
+length = size(Matrix,2)
+%for i = 1:length/row_count
+%    y = length/row_count
+%end
+ for k=1:length(Matrix)
+    colData = data.(k);
+ end
+end

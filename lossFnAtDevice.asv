@@ -1,0 +1,28 @@
+function w_new = lossFnAtDevice(u)
+len = size(u,1)
+sum = 0
+for i = 1:len
+    sum = u(i,1) + sum
+end
+F = sum/len
+
+
+w_old = 1
+iter = 1000
+
+%x = sym('x')
+%y = sym('y')
+w = sym('w_old')
+
+w_new = 1
+%y = x';
+%f = x.^2 .* y.^3;
+
+%f = 0.5*abs(y-(w_old*x))^2
+%gradient(f, [x, y, w_old])
+%l_step = sin(-1:0.25:0.5);
+%l_stepp = gradient(y,0.25);
+
+%w_new = w_old + (l_step * 
+end
+
